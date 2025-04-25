@@ -11,8 +11,8 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**") // aplica solo a la API REST
-                        .allowedOrigins("*") // puedes restringir a "http://localhost:5500", etc.
+                registry.addMapping("/api/**")  // Aplica solo a la API
+                        .allowedOrigins("*")    // Permitir desde cualquier origen
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };
