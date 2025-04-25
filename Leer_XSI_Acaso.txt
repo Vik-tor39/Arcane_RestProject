@@ -1,0 +1,10 @@
+ARCANE API 
+Este proyecto es una API REST desarrollada con Spring Boot que gestiona el sistema de arcane, sus organizaciones, afiliaciones y relaciones (por el momento). Utiliza una base de datos H2 en memoria para el almacenamiento de datos.
+Esta aplicación se realizó con H2 DB para persistencia de datos. Los datos persisten mientras la aplicación esté en ejecución, al detener la aplicación, todos los datos se pierden.
+
+Endpoints Disponibles
+Entidad	        Métodos Disponibles	Endpoint Base
+Personajes	GET, POST, PUT, DELETE	/api/personajes
+Organizaciones	GET, POST, PUT, DELETE	/api/organizacion
+Afiliaciones	GET, POST, PUT, DELETE	/api/afiliacion
+Relaciones	GET, POST, DELETE	/api/relaciones

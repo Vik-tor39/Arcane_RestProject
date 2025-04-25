@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Superhéroes - Gestión Completa</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; }
+    .section { flex: 1; min-width: 300px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; position: sticky; top: 0; }
+    .tabla-container { max-height: 400px; overflow-y: auto; margin-bottom: 20px; }
+    button { padding: 8px 12px; margin: 5px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 4px; }
+    button:hover { background-color: #45a049; }
+    input, select { padding: 8px; margin: 5px; width: calc(100% - 20px); }
+    .form-group { margin-bottom: 10px; }
+    .hidden { display: none; }
+    h2 { color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 5px; }
+    .error { color: red; }
+    .tab-button { background-color: #f1f1f1; border: none; color: black; padding: 10px 15px; cursor: pointer; }
+    .tab-button.active { background-color: #4CAF50; color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Superhéroes - Gestión Completa</h1>
+  
+  <div class="tab-buttons">
+    <button class="tab-button active" onclick="openTab('personajes')">Personajes</button>
+    <button class="tab-button" onclick="openTab('organizaciones')">Organizaciones</button>
+    <button class="tab-button" onclick="openTab('afiliaciones')">Afiliaciones</button>
+    <button class="tab-button" onclick="openTab('relaciones')">Relaciones</button>
+  </div>
+  
+  <!-- Pestaña Personajes -->
+  <div id="personajes" class="tab-content active">
+    <div class="section">
+      <h2>Personajes</h2>
+      <div class="tabla-container">
+        <table id="personajesTable">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Origen</th>
+              <th>Rol</th>
+              <th>Alineación</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      
+      <button id="btnNuevoPersonaje">Nuevo Personaje</button>
+      
+      <div id="formPersonaje" class="hidden">
+        <h3 id="tituloFormPersonaje">Nuevo Personaje</h3>
+        <div class="form-group">
+          <input type="text" id="nombrePersonaje" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id="origenPersonaje" placeholder="Origen">
+        </div>
+        <div class="form-group">
+          <input type="text" id="rolPersonaje" placeholder="Rol">
+        </div>
+        <div class="form-group">
+          <select id="alineacionPersonaje">
+            <option value="">Seleccione alineación</option>
+            <option value="HEROE">Héroe</option>
+            <option value="VILLANO">Villano</option>
+            <option value="ANTIHEROE">Antihéroe</option>
+            <option value="NEUTRAL">Neutral</option>
+          </select>
+        </div>
+        <button id="btnGuardarPersonaje">Guardar</button>
+        <button id="btnCancelarPersonaje">Cancelar</button>
+        <div id="errorPersonaje" class="error"></div>
+      </div>
+    </div>
+    
+    <!-- Detalles del Personaje -->
+    <div id="detallePersonaje" class="hidden">
+      <div class="section">
+        <h3>Organizaciones del Personaje</h3>
+        <div class="tabla-container">
+          <table id="organizacionesPersonajeTable">
+            <thead>
+              <tr>
+                <th>Organización</th>
+                <th>Rol</th>
+                <th>Fecha Ingreso</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h3>Relaciones del Personaje</h3>
+        <div class="tabla-container">
+          <table id="relacionesPersonajeTable">
+            <thead>
+              <tr>
+                <th>Personaje Relacionado</th>
+                <th>Tipo de Relación</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pestaña Organizaciones -->
+  <div id="organizaciones" class="tab-content">
+    <div class="section">
+      <h2>Organizaciones</h2>
+      <div class="tabla-container">
+        <table id="organizacionesTable">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Ciudad Base</th>
+              <th>Tipo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      
+      <button id="btnNuevaOrganizacion">Nueva Organización</button>
+      
+      <div id="formOrganizacion" class="hidden">
+        <h3 id="tituloFormOrganizacion">Nueva Organización</h3>
+        <div class="form-group">
+          <input type="text" id="nombreOrganizacion" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id="ciudadOrganizacion" placeholder="Ciudad Base">
+        </div>
+        <div class="form-group">
+          <input type="text" id="tipoOrganizacion" placeholder="Tipo">
+        </div>
+        <button id="btnGuardarOrganizacion">Guardar</button>
+        <button id="btnCancelarOrganizacion">Cancelar</button>
+        <div id="errorOrganizacion" class="error"></div>
+      </div>
+    </div>
+    
+    <!-- Detalles de la Organización -->
+    <div id="detalleOrganizacion" class="hidden">
+      <div class="section">
+        <h3>Miembros de la Organización</h3>
+        <div class="tabla-container">
+          <table id="miembrosOrganizacionTable">
+            <thead>
+              <tr>
+                <th>Personaje</th>
+                <th>Rol</th>
+                <th>Fecha Ingreso</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pestaña Afiliaciones -->
+  <div id="afiliaciones" class="tab-content">
+    <div class="section">
+      <h2>Afiliaciones</h2>
+      <div class="tabla-container">
+        <table id="afiliacionesTable">
+          <thead>
+            <tr>
+              <th>Personaje</th>
+              <th>Organización</th>
+              <th>Rol</th>
+              <th>Fecha Ingreso</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      
+      <button id="btnNuevaAfiliacion">Nueva Afiliación</button>
+      
+      <div id="formAfiliacion" class="hidden">
+        <h3>Nueva Afiliación</h3>
+        <div class="form-group">
+          <select id="personajeAfiliacion" required></select>
+        </div>
+        <div class="form-group">
+          <select id="organizacionAfiliacion" required></select>
+        </div>
+        <div class="form-group">
+          <input type="text" id="rolAfiliacion" placeholder="Rol" required>
+        </div>
+        <div class="form-group">
+          <input type="date" id="fechaAfiliacion" required>
+        </div>
+        <button id="btnGuardarAfiliacion">Guardar</button>
+        <button id="btnCancelarAfiliacion">Cancelar</button>
+        <div id="errorAfiliacion" class="error"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pestaña Relaciones -->
+  <div id="relaciones" class="tab-content">
+    <div class="section">
+      <h2>Relaciones</h2>
+      <div class="tabla-container">
+        <table id="relacionesTable">
+          <thead>
+            <tr>
+              <th>Personaje A</th>
+              <th>Personaje B</th>
+              <th>Tipo de Relación</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      
+      <button id="btnNuevaRelacion">Nueva Relación</button>
+      
+      <div id="formRelacion" class="hidden">
+        <h3>Nueva Relación</h3>
+        <div class="form-group">
+          <select id="personajeARelacion" required></select>
+        </div>
+        <div class="form-group">
+          <select id="personajeBRelacion" required></select>
+        </div>
+        <div class="form-group">
+          <input type="text" id="tipoRelacion" placeholder="Tipo de Relación" required>
+        </div>
+        <button id="btnGuardarRelacion">Guardar</button>
+        <button id="btnCancelarRelacion">Cancelar</button>
+        <div id="errorRelacion" class="error"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:8080/api";
+    let personajes = [];
+    let organizaciones = [];
+    let afiliaciones = [];
+    let relaciones = [];
+    let modoEdicion = false;
+    let elementoActual = null;
+
+    // DOM Elements
+    const elements = {
+      // Personajes
+      personajesTable: document.querySelector("#personajesTable tbody"),
+      btnNuevoPersonaje: document.getElementById("btnNuevoPersonaje"),
+      formPersonaje: document.getElementById("formPersonaje"),
+      tituloFormPersonaje: document.getElementById("tituloFormPersonaje"),
+      nombrePersonaje: document.getElementById("nombrePersonaje"),
+      origenPersonaje: document.getElementById("origenPersonaje"),
+      rolPersonaje: document.getElementById("rolPersonaje"),
+      alineacionPersonaje: document.getElementById("alineacionPersonaje"),
+      btnGuardarPersonaje: document.getElementById("btnGuardarPersonaje"),
+      btnCancelarPersonaje: document.getElementById("btnCancelarPersonaje"),
+      errorPersonaje: document.getElementById("errorPersonaje"),
+      detallePersonaje: document.getElementById("detallePersonaje"),
+      organizacionesPersonajeTable: document.querySelector("#organizacionesPersonajeTable tbody"),
+      relacionesPersonajeTable: document.querySelector("#relacionesPersonajeTable tbody"),
+      
+      // Organizaciones
+      organizacionesTable: document.querySelector("#organizacionesTable tbody"),
+      btnNuevaOrganizacion: document.getElementById("btnNuevaOrganizacion"),
+      formOrganizacion: document.getElementById("formOrganizacion"),
+      tituloFormOrganizacion: document.getElementById("tituloFormOrganizacion"),
+      nombreOrganizacion: document.getElementById("nombreOrganizacion"),
+      ciudadOrganizacion: document.getElementById("ciudadOrganizacion"),
+      tipoOrganizacion: document.getElementById("tipoOrganizacion"),
+      btnGuardarOrganizacion: document.getElementById("btnGuardarOrganizacion"),
+      btnCancelarOrganizacion: document.getElementById("btnCancelarOrganizacion"),
+      errorOrganizacion: document.getElementById("errorOrganizacion"),
+      detalleOrganizacion: document.getElementById("detalleOrganizacion"),
+      miembrosOrganizacionTable: document.querySelector("#miembrosOrganizacionTable tbody"),
+      
+      // Afiliaciones
+      afiliacionesTable: document.querySelector("#afiliacionesTable tbody"),
+      btnNuevaAfiliacion: document.getElementById("btnNuevaAfiliacion"),
+      formAfiliacion: document.getElementById("formAfiliacion"),
+      personajeAfiliacion: document.getElementById("personajeAfiliacion"),
+      organizacionAfiliacion: document.getElementById("organizacionAfiliacion"),
+      rolAfiliacion: document.getElementById("rolAfiliacion"),
+      fechaAfiliacion: document.getElementById("fechaAfiliacion"),
+      btnGuardarAfiliacion: document.getElementById("btnGuardarAfiliacion"),
+      btnCancelarAfiliacion: document.getElementById("btnCancelarAfiliacion"),
+      errorAfiliacion: document.getElementById("errorAfiliacion"),
+      
+      // Relaciones
+      relacionesTable: document.querySelector("#relacionesTable tbody"),
+      btnNuevaRelacion: document.getElementById("btnNuevaRelacion"),
+      formRelacion: document.getElementById("formRelacion"),
+      personajeARelacion: document.getElementById("personajeARelacion"),
+      personajeBRelacion: document.getElementById("personajeBRelacion"),
+      tipoRelacion: document.getElementById("tipoRelacion"),
+      btnGuardarRelacion: document.getElementById("btnGuardarRelacion"),
+      btnCancelarRelacion: document.getElementById("btnCancelarRelacion"),
+      errorRelacion: document.getElementById("errorRelacion")
+    };
+
+    // Event Listeners
+    elements.btnNuevoPersonaje.addEventListener("click", () => {
+      modoEdicion = false;
+      elementoActual = null;
+      elements.tituloFormPersonaje.textContent = "Nuevo Personaje";
+      elements.formPersonaje.classList.remove("hidden");
+      resetFormPersonaje();
+    });
+
+    elements.btnCancelarPersonaje.addEventListener("click", () => {
+      elements.formPersonaje.classList.add("hidden");
+    });
+
+    elements.btnGuardarPersonaje.addEventListener("click", guardarPersonaje);
+
+    elements.btnNuevaOrganizacion.addEventListener("click", () => {
+      modoEdicion = false;
+      elementoActual = null;
+      elements.tituloFormOrganizacion.textContent = "Nueva Organización";
+      elements.formOrganizacion.classList.remove("hidden");
+      resetFormOrganizacion();
+    });
+
+    elements.btnCancelarOrganizacion.addEventListener("click", () => {
+      elements.formOrganizacion.classList.add("hidden");
+    });
+
+    elements.btnGuardarOrganizacion.addEventListener("click", guardarOrganizacion);
+
+    elements.btnNuevaAfiliacion.addEventListener("click", () => {
+      modoEdicion = false;
+      elementoActual = null;
+      elements.formAfiliacion.classList.remove("hidden");
+      resetFormAfiliacion();
+    });
+
+    elements.btnCancelarAfiliacion.addEventListener("click", () => {
+      elements.formAfiliacion.classList.add("hidden");
+    });
+
+    elements.btnGuardarAfiliacion.addEventListener("click", guardarAfiliacion);
+
+    elements.btnNuevaRelacion.addEventListener("click", () => {
+      modoEdicion = false;
+      elementoActual = null;
+      elements.formRelacion.classList.remove("hidden");
+      resetFormRelacion();
+    });
+
+    elements.btnCancelarRelacion.addEventListener("click", () => {
+      elements.formRelacion.classList.add("hidden");
+    });
+
+    elements.btnGuardarRelacion.addEventListener("click", guardarRelacion);
+
+    // Funciones de utilidad
+    function resetFormPersonaje() {
+      elements.nombrePersonaje.value = "";
+      elements.origenPersonaje.value = "";
+      elements.rolPersonaje.value = "";
+      elements.alineacionPersonaje.value = "";
+      elements.errorPersonaje.textContent = "";
+    }
+
+    function resetFormOrganizacion() {
+      elements.nombreOrganizacion.value = "";
+      elements.ciudadOrganizacion.value = "";
+      elements.tipoOrganizacion.value = "";
+      elements.errorOrganizacion.textContent = "";
+    }
+
+    function resetFormAfiliacion() {
+      elements.rolAfiliacion.value = "";
+      elements.fechaAfiliacion.value = "";
+      elements.errorAfiliacion.textContent = "";
+    }
+
+    function resetFormRelacion() {
+      elements.tipoRelacion.value = "";
+      elements.errorRelacion.textContent = "";
+    }
+
+    function mostrarError(elementoError, mensaje) {
+      elementoError.textContent = mensaje;
+      setTimeout(() => {
+        elementoError.textContent = "";
+      }, 3000);
+    }
+
+    function openTab(tabName) {
+      // Ocultar todos los tabs
+      const tabContents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+      }
+      
+      // Desactivar todos los botones
+      const tabButtons = document.getElementsByClassName("tab-button");
+      for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove("active");
+      }
+      
+      // Mostrar el tab seleccionado
+      document.getElementById(tabName).classList.add("active");
+      
+      // Activar el botón seleccionado
+      event.currentTarget.classList.add("active");
+      
+      // Cerrar todos los formularios
+      document.getElementById("formPersonaje").classList.add("hidden");
+      document.getElementById("formOrganizacion").classList.add("hidden");
+      document.getElementById("formAfiliacion").classList.add("hidden");
+      document.getElementById("formRelacion").classList.add("hidden");
+    }
+
+    // Funciones para cargar datos
+    async function cargarDatos() {
+      try {
+        await Promise.all([
+          cargarPersonajes(),
+          cargarOrganizaciones(),
+          cargarAfiliaciones(),
+          cargarRelaciones()
+        ]);
+      } catch (error) {
+        console.error("Error al cargar datos iniciales:", error);
+      }
+    }
+
+    async function cargarPersonajes() {
+      try {
+        const response = await fetch(`${API_BASE}/personajes/findAll`);
+        if (response.status === 204) {
+          personajes = [];
+          return;
+        }
+        personajes = await response.json();
+        
+        elements.personajesTable.innerHTML = "";
+        personajes.forEach(p => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${p.nombre}</td>
+            <td>${p.origen || '-'}</td>
+            <td>${p.rol || '-'}</td>
+            <td>${p.alineacion || '-'}</td>
+            <td>
+              <button onclick="editarPersonaje(${p.idPersonaje})">Editar</button>
+              <button onclick="eliminarPersonaje(${p.idPersonaje})">Eliminar</button>
+              <button onclick="mostrarDetallePersonaje(${p.idPersonaje})">Detalles</button>
+            </td>
+          `;
+          elements.personajesTable.appendChild(row);
+          
+          // Llenar select de personajes para afiliaciones y relaciones
+          if (elements.personajeAfiliacion) {
+            const optionAfiliacion = document.createElement("option");
+            optionAfiliacion.value = p.idPersonaje;
+            optionAfiliacion.textContent = p.nombre;
+            elements.personajeAfiliacion.appendChild(optionAfiliacion);
+          }
+          
+          if (elements.personajeARelacion) {
+            const optionRelacionA = document.createElement("option");
+            optionRelacionA.value = p.idPersonaje;
+            optionRelacionA.textContent = p.nombre;
+            elements.personajeARelacion.appendChild(optionRelacionA);
+            
+            const optionRelacionB = document.createElement("option");
+            optionRelacionB.value = p.idPersonaje;
+            optionRelacionB.textContent = p.nombre;
+            elements.personajeBRelacion.appendChild(optionRelacionB);
+          }
+        });
+      } catch (error) {
+        console.error("Error al cargar personajes:", error);
+      }
+    }
+
+    async function cargarOrganizaciones() {
+      try {
+        const response = await fetch(`${API_BASE}/organizacion/findAll`);
+        if (response.status === 204) {
+          organizaciones = [];
+          return;
+        }
+        organizaciones = await response.json();
+        
+        elements.organizacionesTable.innerHTML = "";
+        organizaciones.forEach(o => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${o.nombre}</td>
+            <td>${o.ciudadBase || '-'}</td>
+            <td>${o.tipo || '-'}</td>
+            <td>
+              <button onclick="editarOrganizacion(${o.idOrganization})">Editar</button>
+              <button onclick="eliminarOrganizacion(${o.idOrganization})">Eliminar</button>
+              <button onclick="mostrarDetalleOrganizacion(${o.idOrganization})">Detalles</button>
+            </td>
+          `;
+          elements.organizacionesTable.appendChild(row);
+          
+          // Llenar select de organizaciones para afiliaciones
+          if (elements.organizacionAfiliacion) {
+            const option = document.createElement("option");
+            option.value = o.idOrganization;
+            option.textContent = o.nombre;
+            elements.organizacionAfiliacion.appendChild(option);
+          }
+        });
+      } catch (error) {
+        console.error("Error al cargar organizaciones:", error);
+      }
+    }
+
+    async function cargarAfiliaciones() {
+      try {
+        const response = await fetch(`${API_BASE}/afiliacion/personaje/1`); // Ejemplo, ajustar según necesidad
+        if (response.status === 204) {
+          afiliaciones = [];
+          return;
+        }
+        afiliaciones = await response.json();
+        
+        elements.afiliacionesTable.innerHTML = "";
+        afiliaciones.forEach(a => {
+          const personaje = personajes.find(p => p.idPersonaje === a.id.idPersonaje) || { nombre: 'Desconocido' };
+          const organizacion = organizaciones.find(o => o.idOrganization === a.id.idOrganization) || { nombre: 'Desconocida' };
+          
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${personaje.nombre}</td>
+            <td>${organizacion.nombre}</td>
+            <td>${a.rol || '-'}</td>
+            <td>${a.fechaIngreso || '-'}</td>
+            <td>
+              <button onclick="editarAfiliacion(${a.id.idPersonaje}, ${a.id.idOrganization})">Editar</button>
+              <button onclick="eliminarAfiliacion(${a.id.idPersonaje}, ${a.id.idOrganization})">Eliminar</button>
+            </td>
+          `;
+          elements.afiliacionesTable.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error al cargar afiliaciones:", error);
+      }
+    }
+
+    async function cargarRelaciones() {
+      try {
+        const response = await fetch(`${API_BASE}/relaciones/personaje/1`); // Ejemplo, ajustar según necesidad
+        if (response.status === 204) {
+          relaciones = [];
+          return;
+        }
+        relaciones = await response.json();
+        
+        elements.relacionesTable.innerHTML = "";
+        relaciones.forEach(r => {
+          const personajeA = personajes.find(p => p.idPersonaje === r.id.idPersonajeA) || { nombre: 'Desconocido' };
+          const personajeB = personajes.find(p => p.idPersonaje === r.id.idPersonajeB) || { nombre: 'Desconocido' };
+          
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${personajeA.nombre}</td>
+            <td>${personajeB.nombre}</td>
+            <td>${r.tipoRelacion || '-'}</td>
+            <td>
+              <button onclick="eliminarRelacion(${r.id.idPersonajeA}, ${r.id.idPersonajeB})">Eliminar</button>
+            </td>
+          `;
+          elements.relacionesTable.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error al cargar relaciones:", error);
+      }
+    }
+
+    // Funciones CRUD para Personajes
+    async function guardarPersonaje() {
+      const personaje = {
+        nombre: elements.nombrePersonaje.value,
+        origen: elements.origenPersonaje.value,
+        rol: elements.rolPersonaje.value,
+        alineacion: elements.alineacionPersonaje.value
+      };
+      
+      if (!personaje.nombre) {
+        mostrarError(elements.errorPersonaje, "El nombre es requerido");
+        return;
+      }
+      
+      try {
+        let url = `${API_BASE}/personajes/save`;
+        let method = "POST";
+        
+        if (modoEdicion && elementoActual) {
+          url = `${API_BASE}/personajes/${elementoActual.idPersonaje}/update`;
+          method = "PUT";
+        }
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(personaje)
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al guardar el personaje");
+        }
+        
+        elements.formPersonaje.classList.add("hidden");
+        await cargarPersonajes();
+      } catch (error) {
+        console.error("Error:", error);
+        mostrarError(elements.errorPersonaje, "Error al guardar el personaje");
+      }
+    }
+
+    function editarPersonaje(id) {
+      const personaje = personajes.find(p => p.idPersonaje === id);
+      if (!personaje) return;
+      
+      modoEdicion = true;
+      elementoActual = personaje;
+      
+      elements.tituloFormPersonaje.textContent = "Editar Personaje";
+      elements.nombrePersonaje.value = personaje.nombre;
+      elements.origenPersonaje.value = personaje.origen || "";
+      elements.rolPersonaje.value = personaje.rol || "";
+      elements.alineacionPersonaje.value = personaje.alineacion || "";
+      
+      elements.formPersonaje.classList.remove("hidden");
+    }
+
+    async function eliminarPersonaje(id) {
+      if (!confirm("¿Estás seguro de eliminar este personaje?")) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/personajes/${id}/delete`, {
+          method: "DELETE"
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al eliminar el personaje");
+        }
+        
+        await cargarPersonajes();
+        await cargarAfiliaciones();
+        await cargarRelaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error al eliminar el personaje");
+      }
+    }
+
+    async function mostrarDetallePersonaje(id) {
+      try {
+        // Cargar organizaciones del personaje
+        const responseOrg = await fetch(`${API_BASE}/personajes/${id}/organizaciones`);
+        const organizacionesPersonaje = await responseOrg.json();
+        
+        elements.organizacionesPersonajeTable.innerHTML = "";
+        organizacionesPersonaje.forEach(op => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${op.nombre}</td>
+            <td>-</td>
+            <td>-</td>
+          `;
+          elements.organizacionesPersonajeTable.appendChild(row);
+        });
+        
+        // Cargar relaciones del personaje
+        const responseRel = await fetch(`${API_BASE}/relaciones/personaje/${id}`);
+        const relacionesPersonaje = await responseRel.json();
+        
+        elements.relacionesPersonajeTable.innerHTML = "";
+        relacionesPersonaje.forEach(rp => {
+          const otroPersonajeId = rp.id.idPersonajeA === id ? rp.id.idPersonajeB : rp.id.idPersonajeA;
+          const otroPersonaje = personajes.find(p => p.idPersonaje === otroPersonajeId) || { nombre: 'Desconocido' };
+          
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${otroPersonaje.nombre}</td>
+            <td>${rp.tipoRelacion || '-'}</td>
+          `;
+          elements.relacionesPersonajeTable.appendChild(row);
+        });
+        
+        elements.detallePersonaje.classList.remove("hidden");
+      } catch (error) {
+        console.error("Error al cargar detalles del personaje:", error);
+      }
+    }
+
+    // Funciones CRUD para Organizaciones
+    async function guardarOrganizacion() {
+      const organizacion = {
+        nombre: elements.nombreOrganizacion.value,
+        ciudadBase: elements.ciudadOrganizacion.value,
+        tipo: elements.tipoOrganizacion.value
+      };
+      
+      if (!organizacion.nombre) {
+        mostrarError(elements.errorOrganizacion, "El nombre es requerido");
+        return;
+      }
+      
+      try {
+        let url = `${API_BASE}/organizacion/save`;
+        let method = "POST";
+        
+        if (modoEdicion && elementoActual) {
+          url = `${API_BASE}/organizacion/${elementoActual.idOrganization}/update`;
+          method = "PUT";
+        }
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(organizacion)
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al guardar la organización");
+        }
+        
+        elements.formOrganizacion.classList.add("hidden");
+        await cargarOrganizaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        mostrarError(elements.errorOrganizacion, "Error al guardar la organización");
+      }
+    }
+
+    function editarOrganizacion(id) {
+      const organizacion = organizaciones.find(o => o.idOrganization === id);
+      if (!organizacion) return;
+      
+      modoEdicion = true;
+      elementoActual = organizacion;
+      
+      elements.tituloFormOrganizacion.textContent = "Editar Organización";
+      elements.nombreOrganizacion.value = organizacion.nombre;
+      elements.ciudadOrganizacion.value = organizacion.ciudadBase || "";
+      elements.tipoOrganizacion.value = organizacion.tipo || "";
+      
+      elements.formOrganizacion.classList.remove("hidden");
+    }
+
+    async function eliminarOrganizacion(id) {
+      if (!confirm("¿Estás seguro de eliminar esta organización?")) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/organizacion/${id}/delete`, {
+          method: "DELETE"
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al eliminar la organización");
+        }
+        
+        await cargarOrganizaciones();
+        await cargarAfiliaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error al eliminar la organización");
+      }
+    }
+
+    async function mostrarDetalleOrganizacion(id) {
+      try {
+        const response = await fetch(`${API_BASE}/afiliacion/organization/${id}`);
+        const miembros = await response.json();
+        
+        elements.miembrosOrganizacionTable.innerHTML = "";
+        miembros.forEach(m => {
+          const personaje = personajes.find(p => p.idPersonaje === m.id.idPersonaje) || { nombre: 'Desconocido' };
+          
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${personaje.nombre}</td>
+            <td>${m.rol || '-'}</td>
+            <td>${m.fechaIngreso || '-'}</td>
+          `;
+          elements.miembrosOrganizacionTable.appendChild(row);
+        });
+        
+        elements.detalleOrganizacion.classList.remove("hidden");
+      } catch (error) {
+        console.error("Error al cargar detalles de la organización:", error);
+      }
+    }
+
+    // Funciones CRUD para Afiliaciones
+    async function guardarAfiliacion() {
+      const personajeId = elements.personajeAfiliacion.value;
+      const organizacionId = elements.organizacionAfiliacion.value;
+      const rol = elements.rolAfiliacion.value;
+      const fecha = elements.fechaAfiliacion.value;
+      
+      if (!personajeId || !organizacionId || !rol || !fecha) {
+        mostrarError(elements.errorAfiliacion, "Todos los campos son requeridos");
+        return;
+      }
+      
+      try {
+        let url = `${API_BASE}/afiliacion/save?personajeId=${personajeId}&organizationId=${organizacionId}&rol=${rol}&fechaIngreso=${fecha}`;
+        
+        const response = await fetch(url, {
+          method: "POST"
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al guardar la afiliación");
+        }
+        
+        elements.formAfiliacion.classList.add("hidden");
+        await cargarAfiliaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        mostrarError(elements.errorAfiliacion, "Error al guardar la afiliación");
+      }
+    }
+
+    async function editarAfiliacion(personajeId, organizacionId) {
+      try {
+        const response = await fetch(`${API_BASE}/afiliacion/personaje/${personajeId}`);
+        const afiliacionesPersonaje = await response.json();
+        
+        const afiliacion = afiliacionesPersonaje.find(a => 
+          a.id.idOrganization === organizacionId
+        );
+        
+        if (!afiliacion) return;
+        
+        modoEdicion = true;
+        elementoActual = afiliacion;
+        
+        elements.personajeAfiliacion.value = afiliacion.id.idPersonaje;
+        elements.organizacionAfiliacion.value = afiliacion.id.idOrganization;
+        elements.rolAfiliacion.value = afiliacion.rol || "";
+        elements.fechaAfiliacion.value = afiliacion.fechaIngreso || "";
+        
+        elements.formAfiliacion.classList.remove("hidden");
+      } catch (error) {
+        console.error("Error al cargar afiliación para editar:", error);
+      }
+    }
+
+    async function eliminarAfiliacion(personajeId, organizacionId) {
+      if (!confirm("¿Estás seguro de eliminar esta afiliación?")) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/afiliacion?personajeId=${personajeId}&organizationId=${organizacionId}`, {
+          method: "DELETE"
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al eliminar la afiliación");
+        }
+        
+        await cargarAfiliaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error al eliminar la afiliación");
+      }
+    }
+
+    // Funciones CRUD para Relaciones
+    async function guardarRelacion() {
+      const personajeAId = elements.personajeARelacion.value;
+      const personajeBId = elements.personajeBRelacion.value;
+      const tipo = elements.tipoRelacion.value;
+      
+      if (!personajeAId || !personajeBId || !tipo) {
+        mostrarError(elements.errorRelacion, "Todos los campos son requeridos");
+        return;
+      }
+      
+      if (personajeAId === personajeBId) {
+        mostrarError(elements.errorRelacion, "Un personaje no puede tener relación consigo mismo");
+        return;
+      }
+      
+      try {
+        const url = `${API_BASE}/relaciones/save?idPersonajeA=${personajeAId}&idPersonajeB=${personajeBId}&tipoRelacion=${tipo}`;
+        
+        const response = await fetch(url, {
+          method: "POST"
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al guardar la relación");
+        }
+        
+        elements.formRelacion.classList.add("hidden");
+        await cargarRelaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        mostrarError(elements.errorRelacion, "Error al guardar la relación");
+      }
+    }
+
+    async function eliminarRelacion(personajeAId, personajeBId) {
+      if (!confirm("¿Estás seguro de eliminar esta relación?")) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/relaciones?idPersonajeA=${personajeAId}&idPersonajeB=${personajeBId}`, {
+          method: "DELETE"
+        });
+        
+        if (!response.ok) {
+          throw new Error("Error al eliminar la relación");
+        }
+        
+        await cargarRelaciones();
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error al eliminar la relación");
+      }
+    }
+
+    // Hacer funciones globales para los botones
+    window.editarPersonaje = editarPersonaje;
+    window.eliminarPersonaje = eliminarPersonaje;
+    window.mostrarDetallePersonaje = mostrarDetallePersonaje;
+    window.editarOrganizacion = editarOrganizacion;
+    window.eliminarOrganizacion = eliminarOrganizacion;
+    window.mostrarDetalleOrganizacion = mostrarDetalleOrganizacion;
+    window.editarAfiliacion = editarAfiliacion;
+    window.eliminarAfiliacion = eliminarAfiliacion;
+    window.eliminarRelacion = eliminarRelacion;
+
+    // Inicializar
+    document.addEventListener("DOMContentLoaded", cargarDatos);
+  </script>
+</body>
+</html>
